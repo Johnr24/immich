@@ -181,11 +181,11 @@ class AlbumApiRepository extends ApiRepository {
     );
     album.remoteAssetCount = dto.assetCount;
     album.owner.value =
-        entity.User.fromDto(UserConverter.fromSimpleUserDto(dto.owner));
+        entity.IsarUser.fromDto(UserConverter.fromSimpleUserDto(dto.owner));
     album.remoteThumbnailAssetId = dto.albumThumbnailAssetId;
     final users = dto.albumUsers
         .map((albumUser) => UserConverter.fromSimpleUserDto(albumUser.user));
-    album.sharedUsers.addAll(users.map(entity.User.fromDto));
+    album.sharedUsers.addAll(users.map(entity.IsarUser.fromDto));
     final assets = dto.assets.map(Asset.remote).toList();
     album.assets.addAll(assets);
 

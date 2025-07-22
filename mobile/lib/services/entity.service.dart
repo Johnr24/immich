@@ -18,7 +18,7 @@ class EntityService {
     if (ownerId != null) {
       // replace owner with user from database
       final user = await _isarUserRepository.getByUserId(ownerId);
-      album.owner.value = user == null ? null : User.fromDto(user);
+      album.owner.value = user == null ? null : IsarUser.fromDto(user);
     }
     final thumbnailAssetId =
         album.remoteThumbnailAssetId ?? album.thumbnail.value?.remoteId;
@@ -32,7 +32,7 @@ class EntityService {
       final users = await _isarUserRepository
           .getByUserIds(album.remoteUsers.map((user) => user.id).toList());
       album.sharedUsers.clear();
-      album.sharedUsers.addAll(users.nonNulls.map(User.fromDto));
+      album.sharedUsers.addAll(users.nonNulls.map(IsarUser.fromDto));
       album.shared = true;
     }
     if (album.remoteAssets.isNotEmpty) {

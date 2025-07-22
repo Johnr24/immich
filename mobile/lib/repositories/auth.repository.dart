@@ -50,7 +50,7 @@ class AuthRepository extends DatabaseRepository {
         db.exifInfos.clear(),
         db.albums.clear(),
         db.eTags.clear(),
-        db.users.clear(),
+        db.isarUsers.clear(),
       ]);
     });
   }

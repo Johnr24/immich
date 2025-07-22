@@ -1,9 +1,6 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 import 'package:immich_mobile/domain/models/user_metadata.model.dart';
 
-// TODO: Rename to User once Isar is removed
+// TODO: Remove UserDto once Isar is removed
 class UserDto {
   final String id;
   final String email;
@@ -127,12 +124,125 @@ quotaSizeInBytes: $quotaSizeInBytes,
       quotaSizeInBytes.hashCode;
 }
 
+class User {
+  final String id;
+  final String name;
+  final String email;
+  final DateTime? deletedAt;
+  final bool isAdmin;
+  final String oauthId;
+  final String? pinCode;
+  final bool hasProfileImage;
+  final DateTime profileChangedAt;
+  final int? quotaSizeInBytes;
+  final int quotaUsageInBytes;
+  final String? storageLabel;
+
+  const User({
+    required this.id,
+    required this.name,
+    required this.email,
+    this.deletedAt,
+    required this.isAdmin,
+    required this.oauthId,
+    this.pinCode,
+    required this.hasProfileImage,
+    required this.profileChangedAt,
+    this.quotaSizeInBytes,
+    required this.quotaUsageInBytes,
+    this.storageLabel,
+  });
+
+  User copyWith({
+    String? id,
+    String? name,
+    String? email,
+    DateTime? deletedAt,
+    bool? isAdmin,
+    String? oauthId,
+    String? pinCode,
+    bool? hasProfileImage,
+    DateTime? profileChangedAt,
+    int? quotaSizeInBytes,
+    int? quotaUsageInBytes,
+    String? storageLabel,
+  }) {
+    return User(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      deletedAt: deletedAt ?? this.deletedAt,
+      isAdmin: isAdmin ?? this.isAdmin,
+      oauthId: oauthId ?? this.oauthId,
+      pinCode: pinCode ?? this.pinCode,
+      hasProfileImage: hasProfileImage ?? this.hasProfileImage,
+      profileChangedAt: profileChangedAt ?? this.profileChangedAt,
+      quotaSizeInBytes: quotaSizeInBytes ?? this.quotaSizeInBytes,
+      quotaUsageInBytes: quotaUsageInBytes ?? this.quotaUsageInBytes,
+      storageLabel: storageLabel ?? this.storageLabel,
+    );
+  }
+
+  @override
+  String toString() {
+    return '''User {
+id: $id,
+name: $name,
+email: $email,
+deletedAt: ${deletedAt ?? "<NA>"},
+isAdmin: $isAdmin,
+oauthId: $oauthId,
+pinCode: ${pinCode ?? "<NA>"},
+hasProfileImage: $hasProfileImage,
+profileChangedAt: $profileChangedAt,
+quotaSizeInBytes: ${quotaSizeInBytes ?? "<NA>"},
+quotaUsageInBytes: $quotaUsageInBytes,
+storageLabel: ${storageLabel ?? "<NA>"},
+}''';
+  }
+
+  @override
+  bool operator ==(covariant User other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id &&
+        other.name == name &&
+        other.email == email &&
+        other.deletedAt == deletedAt &&
+        other.isAdmin == isAdmin &&
+        other.oauthId == oauthId &&
+        other.pinCode == pinCode &&
+        other.hasProfileImage == hasProfileImage &&
+        other.profileChangedAt == profileChangedAt &&
+        other.quotaSizeInBytes == quotaSizeInBytes &&
+        other.quotaUsageInBytes == quotaUsageInBytes &&
+        other.storageLabel == storageLabel;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        name.hashCode ^
+        email.hashCode ^
+        deletedAt.hashCode ^
+        isAdmin.hashCode ^
+        oauthId.hashCode ^
+        pinCode.hashCode ^
+        hasProfileImage.hashCode ^
+        profileChangedAt.hashCode ^
+        quotaSizeInBytes.hashCode ^
+        quotaUsageInBytes.hashCode ^
+        storageLabel.hashCode;
+  }
+}
+
 class PartnerUserDto {
   final String id;
   final String email;
   final String name;
   final bool inTimeline;
 
+  // TODO: replace this by hasProfileImage
   final String? profileImagePath;
 
   const PartnerUserDto({
@@ -159,36 +269,15 @@ class PartnerUserDto {
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id,
-      'email': email,
-      'name': name,
-      'inTimeline': inTimeline,
-      'profileImagePath': profileImagePath,
-    };
-  }
-
-  factory PartnerUserDto.fromMap(Map<String, dynamic> map) {
-    return PartnerUserDto(
-      id: map['id'] as String,
-      email: map['email'] as String,
-      name: map['name'] as String,
-      inTimeline: map['inTimeline'] as bool,
-      profileImagePath: map['profileImagePath'] != null
-          ? map['profileImagePath'] as String
-          : null,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory PartnerUserDto.fromJson(String source) =>
-      PartnerUserDto.fromMap(json.decode(source) as Map<String, dynamic>);
-
   @override
   String toString() {
-    return 'PartnerUserDto(id: $id, email: $email, name: $name, inTimeline: $inTimeline, profileImagePath: $profileImagePath)';
+    return '''PartnerUserDto {
+id: $id,
+email: $email,
+name: $name,
+inTimeline: $inTimeline,
+profileImagePath: ${profileImagePath ?? "<NA>"}
+}''';
   }
 
   @override

@@ -14,7 +14,7 @@ class PartnerRepository extends DatabaseRepository {
   const PartnerRepository(super.db);
 
   Future<List<UserDto>> getSharedBy() async {
-    return (await db.users
+    return (await db.isarUsers
             .filter()
             .isPartnerSharedByEqualTo(true)
             .sortById()
@@ -24,7 +24,7 @@ class PartnerRepository extends DatabaseRepository {
   }
 
   Future<List<UserDto>> getSharedWith() async {
-    return (await db.users
+    return (await db.isarUsers
             .filter()
             .isPartnerSharedWithEqualTo(true)
             .sortById()
@@ -34,12 +34,12 @@ class PartnerRepository extends DatabaseRepository {
   }
 
   Stream<List<UserDto>> watchSharedBy() {
-    return (db.users.filter().isPartnerSharedByEqualTo(true).sortById().watch())
+    return (db.isarUsers.filter().isPartnerSharedByEqualTo(true).sortById().watch())
         .map((users) => users.map((u) => u.toDto()).toList());
   }
 
   Stream<List<UserDto>> watchSharedWith() {
-    return (db.users
+    return (db.isarUsers
             .filter()
             .isPartnerSharedWithEqualTo(true)
             .sortById()

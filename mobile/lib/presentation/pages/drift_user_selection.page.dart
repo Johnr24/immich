@@ -5,41 +5,23 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immich_mobile/domain/models/user.model.dart';
 import 'package:immich_mobile/domain/models/album/album.model.dart';
-import 'package:immich_mobile/domain/models/user_metadata.model.dart';
 import 'package:immich_mobile/extensions/asyncvalue_extensions.dart';
 import 'package:immich_mobile/extensions/build_context_extensions.dart';
+import 'package:immich_mobile/infrastructure/entities/user.entity.dart';
 import 'package:immich_mobile/providers/infrastructure/db.provider.dart';
 import 'package:immich_mobile/providers/infrastructure/remote_album.provider.dart';
 import 'package:immich_mobile/providers/user.provider.dart';
-import 'package:immich_mobile/widgets/common/user_circle_avatar.dart';
+import 'package:immich_mobile/widgets/common/drift_user_circle_avatar.dart';
 
 // TODO: Refactor this provider when we have user provider/service/repository pattern in place
 final driftUsersProvider =
-    FutureProvider.autoDispose<List<UserDto>>((ref) async {
+    FutureProvider.autoDispose<List<User>>((ref) async {
   final drift = ref.watch(driftProvider);
   final currentUser = ref.watch(currentUserProvider);
 
-  final userEntities = await drift.managers.userEntity.get();
-
-  final users = userEntities
-      .map(
-        (entity) => UserDto(
-          id: entity.id,
-          name: entity.name,
-          email: entity.email,
-          isAdmin: entity.isAdmin,
-          profileImagePath: entity.profileImagePath,
-          updatedAt: entity.updatedAt,
-          quotaSizeInBytes: entity.quotaSizeInBytes ?? 0,
-          quotaUsageInBytes: entity.quotaUsageInBytes,
-          isPartnerSharedBy: false,
-          isPartnerSharedWith: false,
-          avatarColor: AvatarColor.primary,
-          memoryEnabled: true,
-          inTimeline: true,
-        ),
-      )
-      .toList();
+  final users = await drift.managers.userEntity
+      .map((row) => row.toDto())
+      .get();
 
   users.removeWhere((u) => currentUser?.id == u.id);
 
@@ -57,15 +39,15 @@ class DriftUserSelectionPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<List<UserDto>> suggestedShareUsers =
+    final AsyncValue<List<User>> suggestedShareUsers =
         ref.watch(driftUsersProvider);
-    final sharedUsersList = useState<Set<UserDto>>({});
+    final sharedUsersList = useState<Set<User>>({});
 
     addNewUsersHandler() {
       context.maybePop(sharedUsersList.value.map((e) => e.id).toList());
     }
 
-    buildTileIcon(UserDto user) {
+    buildTileIcon(User user) {
       if (sharedUsersList.value.contains(user)) {
         return CircleAvatar(
           backgroundColor: context.primaryColor,
@@ -75,13 +57,13 @@ class DriftUserSelectionPage extends HookConsumerWidget {
           ),
         );
       } else {
-        return UserCircleAvatar(
+        return DriftUserCircleAvatar(
           user: user,
         );
       }
     }
 
-    buildUserList(List<UserDto> users) {
+    buildUserList(List<User> users) {
       List<Widget> usersChip = [];
 
       for (var user in sharedUsersList.value) {

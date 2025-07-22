@@ -45,9 +45,9 @@ class Album {
   bool activityEnabled;
   @enumerated
   SortOrder sortOrder;
-  final IsarLink<User> owner = IsarLink<User>();
+  final IsarLink<IsarUser> owner = IsarLink<IsarUser>();
   final IsarLink<Asset> thumbnail = IsarLink<Asset>();
-  final IsarLinks<User> sharedUsers = IsarLinks<User>();
+  final IsarLinks<IsarUser> sharedUsers = IsarLinks<IsarUser>();
   final IsarLinks<Asset> assets = IsarLinks<Asset>();
 
   // transient fields
@@ -95,8 +95,8 @@ class Album {
   // accessible in an object freshly created (not loaded from DB)
 
   @ignore
-  Iterable<User> get remoteUsers => sharedUsers.isEmpty
-      ? (sharedUsers as IsarLinksCommon<User>).addedObjects
+  Iterable<IsarUser> get remoteUsers => sharedUsers.isEmpty
+      ? (sharedUsers as IsarLinksCommon<IsarUser>).addedObjects
       : sharedUsers;
 
   @ignore
@@ -162,7 +162,7 @@ class Album {
       activityEnabled: dto.isActivityEnabled,
     );
     a.remoteAssetCount = dto.assetCount;
-    a.owner.value = await db.users.getById(dto.ownerId);
+    a.owner.value = await db.isarUsers.getById(dto.ownerId);
     if (dto.order != null) {
       a.sortOrder =
           dto.order == AssetOrder.asc ? SortOrder.asc : SortOrder.desc;
@@ -175,7 +175,7 @@ class Album {
           .findFirst();
     }
     if (dto.albumUsers.isNotEmpty) {
-      final users = await db.users.getAllById(
+      final users = await db.isarUsers.getAllById(
         dto.albumUsers.map((e) => e.user.id).toList(growable: false),
       );
       a.sharedUsers.addAll(users.cast());

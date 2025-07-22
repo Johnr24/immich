@@ -43,7 +43,7 @@ Future<void> migrateDatabaseIfNeeded(Isar db) async {
       final id = value.intValue;
       if (id != null) {
         await db.writeTxn(() async {
-          final user = await db.users.get(id);
+          final user = await db.isarUsers.get(id);
           await db.storeValues
               .put(StoreValue(StoreKey.currentUser.id, strValue: user?.id));
         });
@@ -79,7 +79,7 @@ Future<void> _migrateTo(Isar db, int version) async {
     await db.exifInfos.clear();
     await db.albums.clear();
     await db.eTags.clear();
-    await db.users.clear();
+    await db.isarUsers.clear();
   });
   await Store.put(StoreKey.version, version);
 }

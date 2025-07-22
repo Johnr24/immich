@@ -16,7 +16,7 @@ class TimelineRepository extends DatabaseRepository {
   const TimelineRepository(super.db);
 
   Future<List<String>> getTimelineUserIds(String id) {
-    return db.users
+    return db.isarUsers
         .filter()
         .inTimelineEqualTo(true)
         .or()
@@ -26,7 +26,7 @@ class TimelineRepository extends DatabaseRepository {
   }
 
   Stream<List<String>> watchTimelineUsers(String id) {
-    return db.users
+    return db.isarUsers
         .filter()
         .inTimelineEqualTo(true)
         .or()
