@@ -54,6 +54,21 @@ export const ExtraModel = (): ClassDecorator => {
 };
 
 @ExtraModel()
+export class SyncAuthUserV1 {
+  id!: string;
+  isAdmin!: boolean;
+  pinCode!: string | null;
+  oauthId!: string;
+  storageLabel!: string | null;
+  @ApiProperty({ type: 'integer' })
+  quotaSizeInBytes!: number | null;
+  @ApiProperty({ type: 'integer' })
+  quotaUsageInBytes!: number;
+  hasProfileImage!: boolean;
+  profileChangedAt!: Date;
+}
+
+@ExtraModel()
 export class SyncUserV1 {
   id!: string;
   name!: string;
@@ -301,6 +316,7 @@ export class SyncAckV1 {}
 export class SyncResetV1 {}
 
 export type SyncItem = {
+  [SyncEntityType.AuthUserV1]: SyncAuthUserV1;
   [SyncEntityType.UserV1]: SyncUserV1;
   [SyncEntityType.UserDeleteV1]: SyncUserDeleteV1;
   [SyncEntityType.PartnerV1]: SyncPartnerV1;

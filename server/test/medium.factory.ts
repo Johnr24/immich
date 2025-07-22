@@ -507,7 +507,13 @@ const userInsert = (user: Partial<Insertable<UserTable>> = {}) => {
     deletedAt: null,
     isAdmin: false,
     profileImagePath: '',
+    profileChangedAt: newDate(),
     shouldChangePassword: true,
+    storageLabel: null,
+    pinCode: null,
+    oauthId: '',
+    quotaSizeInBytes: null,
+    quotaUsageInBytes: 0,
   };
 
   return { ...defaults, ...user, id };
