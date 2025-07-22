@@ -6,6 +6,7 @@ import 'package:immich_mobile/domain/models/album/local_album.model.dart';
 import 'package:immich_mobile/domain/models/asset/base_asset.model.dart';
 import 'package:immich_mobile/domain/models/log.model.dart';
 import 'package:immich_mobile/domain/models/memory.model.dart';
+import 'package:immich_mobile/domain/models/person.model.dart';
 import 'package:immich_mobile/domain/models/user.model.dart';
 import 'package:immich_mobile/domain/services/timeline.service.dart';
 import 'package:immich_mobile/entities/album.entity.dart';
@@ -94,6 +95,7 @@ import 'package:immich_mobile/presentation/pages/drift_user_selection.page.dart'
 import 'package:immich_mobile/presentation/pages/drift_remote_album.page.dart';
 import 'package:immich_mobile/presentation/pages/drift_trash.page.dart';
 import 'package:immich_mobile/presentation/pages/drift_video.page.dart';
+import 'package:immich_mobile/presentation/pages/drift_person_detail.dart';
 import 'package:immich_mobile/presentation/pages/local_timeline.page.dart';
 import 'package:immich_mobile/presentation/pages/search/drift_search.page.dart';
 import 'package:immich_mobile/presentation/widgets/asset_viewer/asset_viewer.page.dart';
@@ -481,18 +483,20 @@ class AppRouter extends RootStackRouter {
       page: DriftUserSelectionRoute.page,
       guards: [_authGuard, _duplicateGuard],
     ),
-
     AutoRoute(
       page: ChangeExperienceRoute.page,
       guards: [_authGuard, _duplicateGuard],
     ),
-
     AutoRoute(
       page: DriftPartnerRoute.page,
       guards: [_authGuard, _duplicateGuard],
     ),
     AutoRoute(
       page: DriftUploadDetailRoute.page,
+      guards: [_authGuard, _duplicateGuard],
+    ),
+    AutoRoute(
+      page: DriftPersonDetailRoute.page,
       guards: [_authGuard, _duplicateGuard],
     ),
     // required to handle all deeplinks in deep_link.service.dart
