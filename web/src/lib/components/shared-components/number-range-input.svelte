@@ -24,14 +24,8 @@
     onPaste = undefined,
   }: Props = $props();
 
-  const oninput = () => {
-    if (!value) {
-      return;
-    }
-
-    if (value !== null && (value < min || value > max)) {
-      value = clamp(value, min, max);
-    }
+  const oninput = (newValue: number) => {
+    value = clamp(newValue, min, max);
     onInput(value);
   };
 </script>
@@ -44,7 +38,7 @@
   {max}
   {step}
   {required}
-  bind:value
-  {oninput}
+  value
+  oninput={({ currentTarget }) => oninput(currentTarget.valueAsNumber)}
   onpaste={onPaste}
 />
