@@ -28,6 +28,36 @@ class SyncStreamRepository extends DriftDatabaseRepository {
 
   SyncStreamRepository(super.db) : _db = db;
 
+  Future<void> updateAuthUsersV1(Iterable<SyncAuthUserV1> data) async {
+    try {
+      await _db.batch((batch) {
+        for (final authUser in data) {
+          final companion = UserEntityCompanion(
+            isAdmin: Value(authUser.isAdmin),
+            oauthId: Value(authUser.oauthId),
+            pinCode: Value(authUser.pinCode),
+            hasProfileImage: Value(authUser.hasProfileImage),
+            // TODO: Remove nullable after #20067
+            profileChangedAt: Value(authUser.profileChangedAt!),
+            // TODO: Remove toInt() after #20067
+            quotaSizeInBytes: Value(authUser.quotaSizeInBytes?.toInt()),
+            quotaUsageInBytes: Value(authUser.quotaUsageInBytes!.toInt()),
+            storageLabel: Value(authUser.storageLabel),
+          );
+
+          batch.insert(
+            _db.userEntity,
+            companion.copyWith(id: Value(authUser.id)),
+            onConflict: DoUpdate((_) => companion),
+          );
+        }
+      });
+    } catch (error, stack) {
+      _logger.severe('Error: SyncAuthUserV1', error, stack);
+      rethrow;
+    }
+  }
+
   Future<void> deleteUsersV1(Iterable<SyncUserDeleteV1> data) async {
     try {
       await _db.userEntity

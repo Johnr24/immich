@@ -79,14 +79,28 @@ class UserEntity extends Table with DriftDefaultsMixin {
   const UserEntity();
 
   TextColumn get id => text()();
+
   TextColumn get name => text()();
-  BoolColumn get isAdmin => boolean().withDefault(const Constant(false))();
+
   TextColumn get email => text()();
-  TextColumn get profileImagePath => text().nullable()();
-  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
-  // Quota
+
+  DateTimeColumn get deletedAt => dateTime().nullable()();
+
+  BoolColumn get isAdmin => boolean().withDefault(const Constant(false))();
+
+  TextColumn get oauthId => text().withDefault(const Constant(''))();
+
+  TextColumn get pinCode => text().nullable()();
+
+  BoolColumn get hasProfileImage => boolean().withDefault(const Constant(false))();
+
+  DateTimeColumn get profileChangedAt => dateTime().withDefault(currentDateAndTime)();
+
   IntColumn get quotaSizeInBytes => integer().nullable()();
+
   IntColumn get quotaUsageInBytes => integer().withDefault(const Constant(0))();
+
+  TextColumn get storageLabel => text().nullable()();
 
   @override
   Set<Column> get primaryKey => {id};

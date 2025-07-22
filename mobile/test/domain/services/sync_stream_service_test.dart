@@ -49,6 +49,8 @@ void main() {
 
     when(() => mockSyncApiRepo.ack(any())).thenAnswer((_) async => {});
 
+    when(() => mockSyncStreamRepo.updateAuthUsersV1(any()))
+        .thenAnswer(successHandler);
     when(() => mockSyncStreamRepo.updateUsersV1(any()))
         .thenAnswer(successHandler);
     when(() => mockSyncStreamRepo.deleteUsersV1(any()))
