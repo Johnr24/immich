@@ -17,6 +17,11 @@ The `immich-server` docker image comes preinstalled with an administrative CLI (
 ## How to run a command
 
 To run a command, [connect](/docs/guides/docker-help.md#attach-to-a-container) to the `immich_server` container and then execute the command via `immich-admin <command>`.
+### Note 
+
+you will need to run it from the root of the container, in this case the prefix is bin so the command will be `bin/immich-admin <command>`.
+
+
 
 ## Examples
 
